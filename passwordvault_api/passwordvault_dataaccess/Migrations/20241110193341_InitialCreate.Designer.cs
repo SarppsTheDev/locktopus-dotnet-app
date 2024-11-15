@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using passwordvault_data;
+using passwordvault_dataaccess;
 
 #nullable disable
 
-namespace passwordvault_data.Migrations
+namespace passwordvault_dataaccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241110200401_ExtendUserRegistrationDetails")]
-    partial class ExtendUserRegistrationDetails
+    [Migration("20241110193341_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -176,14 +176,6 @@ namespace passwordvault_data.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");

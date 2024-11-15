@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
-using passwordvault_data;
+using passwordvault_dataaccess;
+using passwordvault_domain;
 using passwordvault_domain.Entities;
+using passwordvault_domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddAuthorizationBuilder();
 
+// Database Context
 builder.Services.AddDbContext<AppDbContext>();
+
+// App Services
+builder.Services.AddTransient<ILoginItemService, LoginItemService>();
 
 // Register the Identity services
 builder.Services.AddIdentityCore<User>()

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using passwordvault_domain.Entities;
 
-namespace passwordvault_data;
+namespace passwordvault_dataaccess;
 
 public class AppDbContext : IdentityDbContext<User>
 {
