@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace passwordvault_data.Migrations
+namespace passwordvault_dataaccess.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
