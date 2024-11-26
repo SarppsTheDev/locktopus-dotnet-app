@@ -7,6 +7,7 @@ namespace passwordvault_dataaccess;
 public class AppDbContext : IdentityDbContext<User>
 {
     DbSet<User> Users { get; set; }
+    DbSet<LoginItem> LoginItems { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

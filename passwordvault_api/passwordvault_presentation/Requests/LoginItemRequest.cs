@@ -10,7 +10,7 @@ public class LoginItemRequest
     /// <summary>
     /// URL of website associated with login item
     /// </summary>
-    public string Url { get; set; }
+    public string WebsiteUrl { get; set; }
     
     /// <summary>
     /// Username for website login
