@@ -1,11 +1,32 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using passwordvault_domain.Entities;
+using passwordvault_domain.Helpers;
+using passwordvault_domain.Repositories;
 
 namespace passwordvault_domain.Services;
 
-public class LoginItemService : ILoginItemService
+public class LoginItemService: ILoginItemService
 {
-    public bool CreateLoginItem(LoginItem loginItem)
+    private readonly ILoginItemRepository _loginItemRepository;
+    private readonly EncryptionHelper _encryptionHelper;
+    private readonly ILogger<LoginItemService> _logger;
+    
+    public LoginItemService(ILoginItemRepository loginItemRepository, IConfiguration configuration, ILogger<LoginItemService> logger)
     {
-        throw new NotImplementedException();
+        _loginItemRepository = loginItemRepository;
+        _logger = logger;
+        var encryptionKey = configuration["EncryptionSecrets:Key"] ?? throw new Exception("Encryption key not configured");
+        var encryptionIv = configuration["EncryptionSecrets:IV"] ?? throw new Exception("Encryption IV not configured");
+        _encryptionHelper = new EncryptionHelper(encryptionKey, encryptionIv);
+    }
+
+    public async Task<bool> CreateLoginItem(LoginItem loginItem)
+    {
+       loginItem.EncryptedPassword = _encryptionHelper.Encrypt(loginItem.Password);
+       var createdId = await _loginItemRepository.Create(loginItem);
+       
+       //TODO: Add log to notify success or failure
+       return createdId > 0;
     }
 }
