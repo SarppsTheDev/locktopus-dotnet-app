@@ -25,8 +25,14 @@ public class LoginItemService: ILoginItemService
     {
        loginItem.EncryptedPassword = _encryptionHelper.Encrypt(loginItem.Password);
        var createdId = await _loginItemRepository.Create(loginItem);
+
+       if (createdId == 0)
+       {
+           _logger.LogError("Could not create login item: {LoginItemTitle}", loginItem.Title);
+           return false;
+       }
        
-       //TODO: Add log to notify success or failure
-       return createdId > 0;
+       _logger.LogInformation("Created login item: {LoginItemTitle}", loginItem.Title);
+       return true;
     }
 }
