@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace passwordvault_presentation.Requests;
 
 public class LoginItemRequest
@@ -10,6 +12,7 @@ public class LoginItemRequest
     /// <summary>
     /// URL of website associated with login item
     /// </summary>
+    [Url(ErrorMessage = "The Website URL must be a valid URL.")]
     public string WebsiteUrl { get; set; }
     
     /// <summary>
