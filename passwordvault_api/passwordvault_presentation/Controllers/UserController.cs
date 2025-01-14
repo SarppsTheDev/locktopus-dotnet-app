@@ -10,7 +10,7 @@ namespace passwordvault_presentation.Controllers;
 public class UserController(UserManager<User> userManager, ILogger<UserController> logger) : ControllerBase
 {
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody]UserRegistrationRequest request) 
+    public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
     {
         try
         {
@@ -21,18 +21,16 @@ public class UserController(UserManager<User> userManager, ILogger<UserControlle
                 FirstName = request.FirstName,
                 LastName = request.LastName,
             };
-            
+
             var result = await userManager.CreateAsync(user, request.Password);
-            
-            if(!result.Succeeded)
+
+            if (!result.Succeeded)
                 return BadRequest(result.Errors);
-            
+
             return Ok("User registered successfully");
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error registering user");
-            
             return BadRequest("Failed to register user");
         }
     }

@@ -5,6 +5,11 @@ namespace passwordvault_presentation.Requests;
 public class LoginItemRequest
 {
     /// <summary>
+    /// ID of the login item. This will not be used in creation requests
+    /// </summary>
+    public int LoginItemId { get; set; }
+    
+    /// <summary>
     /// Title of the login item i.e. name of website it is for
     /// </summary>
     public string Title { get; set; }

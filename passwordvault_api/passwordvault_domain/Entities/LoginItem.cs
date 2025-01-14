@@ -42,6 +42,9 @@ public class LoginItem
     /// </summary>
     public string? Notes { get; set; }
     
+    /// <summary>
+    /// ID of the User the login item belongs to
+    /// </summary>
     public string UserId { get; set; }
     public User User { get; set; }
 }

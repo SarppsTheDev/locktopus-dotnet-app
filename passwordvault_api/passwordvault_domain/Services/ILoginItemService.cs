@@ -4,5 +4,6 @@ namespace passwordvault_domain.Services;
 
 public interface ILoginItemService
 {
-    Task<bool> CreateLoginItem(LoginItem loginItem);
+    Task<int> CreateLoginItem(LoginItem loginItem);
+    Task<LoginItem> UpdateLoginItem(LoginItem loginItem);
 }
