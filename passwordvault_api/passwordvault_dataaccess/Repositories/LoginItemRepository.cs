@@ -45,8 +45,16 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
         }
     }
 
-    public void Delete(LoginItem entity)
+    public async Task<int> Delete(int loginItemId)
     {
-        throw new NotImplementedException();
+        var loginItem = await LoginItems.FindAsync(loginItemId);
+
+        if (loginItem == null)
+        {
+            return 0; // Return 0 rows affected if the item is not found.
+        }
+
+        LoginItems.Remove(loginItem);
+        return await dbContext.SaveChangesAsync(); // Return the number of rows affected (1 if successful).
     }
 }

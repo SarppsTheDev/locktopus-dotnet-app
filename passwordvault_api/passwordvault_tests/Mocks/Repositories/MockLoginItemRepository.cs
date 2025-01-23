@@ -44,7 +44,7 @@ internal class MockLoginItemRepository
             });
 
         // Setup for Delete
-        mock.Setup(repo => repo.Delete(It.IsAny<LoginItem>()))
+        mock.Setup(repo => repo.Delete(It.IsAny<int>()))
             .Callback((LoginItem loginItem) =>
             {
                 loginItems.RemoveAll(li => li.LoginItemId == loginItem.LoginItemId);
