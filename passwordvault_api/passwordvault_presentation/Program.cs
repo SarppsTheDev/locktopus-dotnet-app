@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using passwordvault_dataaccess;
 using passwordvault_dataaccess.Repositories;
 using passwordvault_domain.Entities;
+using passwordvault_domain.Helpers;
 using passwordvault_domain.Repositories;
 using passwordvault_domain.Services;
 
@@ -41,6 +42,7 @@ builder.Services.AddSwaggerGen(c => {
 });
 
 // User Authentication
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddAuthorizationBuilder();
 
@@ -52,7 +54,9 @@ builder.Services.AddTransient<ILoginItemRepository, LoginItemRepository>();
 builder.Services.AddTransient<ILoginItemQueryRepository, LoginItemQueryRepository>();
 
 // Domain Services
+builder.Services.AddScoped<IUserContextHelper, UserContextHelper>();
 builder.Services.AddTransient<ILoginItemService, LoginItemService>();
+
 
 // Register the Identity services
 builder.Services.AddIdentityCore<User>()

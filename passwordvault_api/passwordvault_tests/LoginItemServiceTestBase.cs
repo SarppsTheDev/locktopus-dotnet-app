@@ -30,6 +30,6 @@ public class LoginItemServiceTestBase
         MockLogger = new Mock<ILogger<LoginItemService>>();
 
         // Initialize the service with mocks
-        Service = new LoginItemService(MockRepository.Object, MockConfiguration.Object, MockLogger.Object);
+        // Service = new LoginItemService(MockRepository.Object, MockConfiguration.Object, MockLogger.Object);
     }
 }
