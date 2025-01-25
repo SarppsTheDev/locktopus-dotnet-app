@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using passwordvault_domain.Entities;
+using passwordvault_domain.Exceptions;
 using passwordvault_domain.Helpers;
 using passwordvault_domain.Repositories;
 
@@ -9,17 +10,23 @@ namespace passwordvault_domain.Services;
 public class LoginItemService : ILoginItemService
 {
     private readonly ILoginItemRepository _loginItemRepository;
+    private readonly ILoginItemQueryRepository _loginItemQueryRepository;
+    private readonly IUserContextHelper _userContext;
+    private readonly string _userId;
     private readonly EncryptionHelper _encryptionHelper;
     private readonly ILogger<LoginItemService> _logger;
 
     public LoginItemService(ILoginItemRepository loginItemRepository,
+        ILoginItemQueryRepository loginItemQueryRepository,
+        IUserContextHelper userContext,
         IConfiguration configuration,
         ILogger<LoginItemService> logger)
     {
         _loginItemRepository = loginItemRepository;
         _logger = logger;
-        var encryptionKey = configuration["EncryptionSecrets:Key"] ??
-                            throw new Exception("Encryption key not configured");
+        _loginItemQueryRepository = loginItemQueryRepository;
+        _userContext = userContext;
+        var encryptionKey = configuration["EncryptionSecrets:Key"] ?? throw new Exception("Encryption key not configured");
         var encryptionIv = configuration["EncryptionSecrets:IV"] ?? throw new Exception("Encryption IV not configured");
         _encryptionHelper = new EncryptionHelper(encryptionKey, encryptionIv);
     }
@@ -41,12 +48,14 @@ public class LoginItemService : ILoginItemService
 
     public async Task<LoginItem> UpdateLoginItem(LoginItem loginItem)
     {
+        await CheckIfLoginItemBelongsToCurrentUser(loginItem.LoginItemId);
+        
         // Encrypt the updated password if provided
         if (!string.IsNullOrEmpty(loginItem.Password))
         {
             loginItem.EncryptedPassword = _encryptionHelper.Encrypt(loginItem.Password);
         }
-
+        
         var updatedItem = await _loginItemRepository.Update(loginItem);
 
         if (updatedItem == null)
@@ -61,14 +70,28 @@ public class LoginItemService : ILoginItemService
 
     public async Task DeleteLoginItem(int loginItemId)
     {
+        await CheckIfLoginItemBelongsToCurrentUser(loginItemId);
+        
         var rowsAffected = await _loginItemRepository.Delete(loginItemId);
 
         if (rowsAffected == 0)
         {
             _logger.LogError("Failed to delete login item with ID: {LoginItemId}", loginItemId);
-            throw new KeyNotFoundException($"Login item with ID {loginItemId} not found.");
+            throw new Exception($"Failed to delete login item with ID: {loginItemId}");
         }
 
         _logger.LogInformation("Successfully deleted login item with ID: {LoginItemId}", loginItemId);
+    }
+
+    private async Task CheckIfLoginItemBelongsToCurrentUser(int loginItemId)
+    {
+        var userId = _userContext.UserId;
+        var loginItem = await _loginItemQueryRepository.GetById(loginItemId);
+
+        if (loginItem.UserId != userId)
+        {
+            _logger.LogError("User not authorized to update login item");
+            throw new UnauthorizedAccessException();
+        }
     }
 }

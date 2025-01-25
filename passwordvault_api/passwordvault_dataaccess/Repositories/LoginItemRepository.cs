@@ -1,12 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using passwordvault_domain.Entities;
+using passwordvault_domain.Exceptions;
 using passwordvault_domain.Repositories;
 
 namespace passwordvault_dataaccess.Repositories;
 
 public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemRepository> logger) : ILoginItemRepository
 {
+    //TODO: Refactor check for existing login item into private method
+    //TODO: Test error handling of repository
+    
     private DbSet<LoginItem> LoginItems => dbContext.Set<LoginItem>();
     
     public async Task<int> Create(LoginItem loginItem)
@@ -25,7 +29,7 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
             if (existingItem == null)
             {
                 logger.LogError("Could not find login item with id {ItemId}", loginItem.LoginItemId);
-                throw new KeyNotFoundException($"Login Item with ID {loginItem.LoginItemId} was not found");
+                throw new LoginItemNotFoundException($"Login Item with ID {loginItem.LoginItemId} was not found");
             }
 
             existingItem.Title = loginItem.Title;
@@ -47,14 +51,23 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
 
     public async Task<int> Delete(int loginItemId)
     {
-        var loginItem = await LoginItems.FindAsync(loginItemId);
-
-        if (loginItem == null)
+        try
         {
-            return 0; // Return 0 rows affected if the item is not found.
-        }
+            var existingItem = await LoginItems.FindAsync(loginItemId);
 
-        LoginItems.Remove(loginItem);
-        return await dbContext.SaveChangesAsync(); // Return the number of rows affected (1 if successful).
+            if (existingItem == null)
+            {
+                logger.LogError("Could not find login item with id {ItemId}", loginItemId);
+                throw new LoginItemNotFoundException($"Login Item with ID {loginItemId} was not found");
+            }
+            
+            LoginItems.Remove(existingItem);
+            return await dbContext.SaveChangesAsync(); // Return the number of rows affected (1 if successful).
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error deleting login item with ID {LoginItemId}", loginItemId);
+            throw;
+        }
     }
 }

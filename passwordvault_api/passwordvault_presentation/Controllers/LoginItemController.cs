@@ -2,6 +2,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using passwordvault_domain.Entities;
+using passwordvault_domain.Exceptions;
+using passwordvault_domain.Helpers;
 using passwordvault_domain.Services;
 using passwordvault_presentation.Requests;
 
@@ -10,15 +12,14 @@ namespace passwordvault_presentation.Controllers;
 [Authorize]
 [ApiController]
 [Route("[controller]")]
-public class LoginItemController(ILogger<LoginItemController> logger, ILoginItemService loginItemService) : ControllerBase
+public class LoginItemController(ILogger<LoginItemController> logger, ILoginItemService loginItemService, IUserContextHelper userContext) : ControllerBase
 {
-    [HttpPost("create-login-item")]
-    public async Task<IActionResult> Create([FromBody]LoginItemRequest request) 
+    [HttpPost("create")]
+    public async Task<IActionResult> Create([FromBody]LoginItemRequest request)
     {
         try
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if(!userContext.IsAuthenticated)
             {
                 return Unauthorized("User is not logged in.");
             }
@@ -30,7 +31,7 @@ public class LoginItemController(ILogger<LoginItemController> logger, ILoginItem
                 Password = request.Password,
                 WebsiteUrl = request.WebsiteUrl,
                 Notes = request.Notes,
-                UserId = userId
+                UserId = userContext.UserId
             };
             
             var created = await loginItemService.CreateLoginItem(item);
@@ -45,17 +46,16 @@ public class LoginItemController(ILogger<LoginItemController> logger, ILoginItem
         }
     }
 
-    [HttpPost("update-login-item")]
+    [HttpPost("update")]
     public async Task<IActionResult> Update([FromBody] LoginItemRequest request)
     {
         try
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (!userContext.IsAuthenticated)
             {
                 return Unauthorized("User is not logged in.");
             }
-            
+
             var item = new LoginItem
             {
                 LoginItemId = request.LoginItemId,
@@ -64,18 +64,56 @@ public class LoginItemController(ILogger<LoginItemController> logger, ILoginItem
                 Password = request.Password,
                 WebsiteUrl = request.WebsiteUrl,
                 Notes = request.Notes,
-                UserId = userId
+                UserId = userContext.UserId
             };
-            
+
             var updatedLoginItem = await loginItemService.UpdateLoginItem(item);
 
             return Ok(updatedLoginItem);
         }
-        catch (Exception e)
+        catch (LoginItemNotFoundException ex)
         {
-            logger.LogError(e, "Error updating login item");
-            
+            return NotFound(ex.Message);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized("User not authorized to update login item.");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error updating login item");
+
             return BadRequest("Failed to update login item");
+        }
+        
+    }
+
+    [HttpDelete("delete/{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        try
+        {
+            if(!userContext.IsAuthenticated)
+            {
+                return Unauthorized("User is not logged in.");
+            }
+
+            await loginItemService.DeleteLoginItem(id);
+
+            return Ok("Login item deleted");
+
+        }
+        catch (LoginItemNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized("User not authorized to update login item.");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Failed to delete login item");
         }
     }
 }

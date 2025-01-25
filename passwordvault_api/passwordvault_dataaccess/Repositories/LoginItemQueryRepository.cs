@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using passwordvault_domain.Entities;
+using passwordvault_domain.Exceptions;
 using passwordvault_domain.Repositories;
 
 namespace passwordvault_dataaccess.Repositories;
@@ -13,9 +14,14 @@ public class LoginItemQueryRepository(AppDbContext dbContext) : ILoginItemQueryR
 
         if (loginItem == null)
         {
-            throw new Exception($"No login item exists with ID {id}");
+            throw new LoginItemNotFoundException($"No login item exists with ID {id}");
         }
 
         return loginItem;
+    }
+
+    public async Task<List<LoginItem>> GetLoginItemsByUserId(string userId)
+    {
+        return await LoginItems.Where(li => li.UserId == userId).ToListAsync();
     }
 }

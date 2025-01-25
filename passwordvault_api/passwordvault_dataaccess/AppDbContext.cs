@@ -12,6 +12,6 @@ public class AppDbContext : IdentityDbContext<User>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(
-            @"Server=localhost,1433;Database=PasswordVaultDB;User Id=sa;Password=Arsenal1996;TrustServerCertificate=true;");
+            @"Server=localhost,1433;Database=PasswordVaultDB;User Id=sa;Password=Ars3nal1996?!;TrustServerCertificate=true;");
     }
 }
