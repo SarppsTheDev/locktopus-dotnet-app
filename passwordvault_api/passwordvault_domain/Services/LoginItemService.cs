@@ -12,7 +12,6 @@ public class LoginItemService : ILoginItemService
     private readonly ILoginItemRepository _loginItemRepository;
     private readonly ILoginItemQueryRepository _loginItemQueryRepository;
     private readonly IUserContextHelper _userContext;
-    private readonly string _userId;
     private readonly EncryptionHelper _encryptionHelper;
     private readonly ILogger<LoginItemService> _logger;
 
