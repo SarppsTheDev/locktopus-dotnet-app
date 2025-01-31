@@ -8,7 +8,6 @@ namespace passwordvault_dataaccess.Repositories;
 
 public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemRepository> logger) : ILoginItemRepository
 {
-    //TODO: Refactor check for existing login item into private method
     //TODO: Test error handling of repository
     
     private DbSet<LoginItem> LoginItems => dbContext.Set<LoginItem>();
@@ -24,15 +23,9 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
     {
         try
         {
-            var existingItem = await LoginItems.FindAsync(loginItem.LoginItemId);
+            var existingItem = await GetExistingLoginItem(loginItem.LoginItemId);
 
-            if (existingItem == null)
-            {
-                logger.LogError("Could not find login item with id {ItemId}", loginItem.LoginItemId);
-                throw new LoginItemNotFoundException($"Login Item with ID {loginItem.LoginItemId} was not found");
-            }
-
-            existingItem.Title = loginItem.Title;
+            existingItem.Title = loginItem.Title;  
             existingItem.Username = loginItem.Username;
             existingItem.EncryptedPassword = loginItem.EncryptedPassword;
             existingItem.WebsiteUrl = loginItem.WebsiteUrl;
@@ -53,13 +46,7 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
     {
         try
         {
-            var existingItem = await LoginItems.FindAsync(loginItemId);
-
-            if (existingItem == null)
-            {
-                logger.LogError("Could not find login item with id {ItemId}", loginItemId);
-                throw new LoginItemNotFoundException($"Login Item with ID {loginItemId} was not found");
-            }
+            var existingItem = await GetExistingLoginItem(loginItemId);
             
             LoginItems.Remove(existingItem);
             return await dbContext.SaveChangesAsync(); // Return the number of rows affected (1 if successful).
@@ -69,5 +56,16 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
             logger.LogError(ex, "Error deleting login item with ID {LoginItemId}", loginItemId);
             throw;
         }
+    }
+    
+    private async Task<LoginItem> GetExistingLoginItem(int loginItemId)
+    {
+        var existingItem = await LoginItems.FindAsync(loginItemId);
+
+        if (existingItem != null) return existingItem;
+        
+        logger.LogError("Could not find login item with id {ItemId}", loginItemId);
+        throw new LoginItemNotFoundException($"Login Item with ID {loginItemId} was not found");
+
     }
 }
