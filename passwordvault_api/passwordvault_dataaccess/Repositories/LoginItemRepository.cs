@@ -9,9 +9,9 @@ namespace passwordvault_dataaccess.Repositories;
 public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemRepository> logger) : ILoginItemRepository
 {
     //TODO: Test error handling of repository
-    
+
     private DbSet<LoginItem> LoginItems => dbContext.Set<LoginItem>();
-    
+
     public async Task<int> Create(LoginItem loginItem)
     {
         LoginItems.Add(loginItem);
@@ -25,8 +25,9 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
         {
             var existingItem = await GetExistingLoginItem(loginItem.LoginItemId);
 
-            existingItem.Title = loginItem.Title;  
+            existingItem.Title = loginItem.Title;
             existingItem.Username = loginItem.Username;
+            existingItem.Password = loginItem.Password;
             existingItem.EncryptedPassword = loginItem.EncryptedPassword;
             existingItem.WebsiteUrl = loginItem.WebsiteUrl;
             existingItem.Notes = loginItem.Notes;
@@ -47,7 +48,7 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
         try
         {
             var existingItem = await GetExistingLoginItem(loginItemId);
-            
+
             LoginItems.Remove(existingItem);
             return await dbContext.SaveChangesAsync(); // Return the number of rows affected (1 if successful).
         }
@@ -57,15 +58,14 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
             throw;
         }
     }
-    
+
     private async Task<LoginItem> GetExistingLoginItem(int loginItemId)
     {
         var existingItem = await LoginItems.FindAsync(loginItemId);
 
         if (existingItem != null) return existingItem;
-        
+
         logger.LogError("Could not find login item with id {ItemId}", loginItemId);
         throw new LoginItemNotFoundException($"Login Item with ID {loginItemId} was not found");
-
     }
 }

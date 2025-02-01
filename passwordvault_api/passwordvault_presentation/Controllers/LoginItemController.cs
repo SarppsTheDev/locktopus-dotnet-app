@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using passwordvault_domain.Entities;
@@ -6,24 +5,28 @@ using passwordvault_domain.Exceptions;
 using passwordvault_domain.Helpers;
 using passwordvault_domain.Services;
 using passwordvault_presentation.Requests;
+using passwordvault_presentation.Responses;
 
 namespace passwordvault_presentation.Controllers;
 
 [Authorize]
 [ApiController]
 [Route("[controller]")]
-public class LoginItemController(ILogger<LoginItemController> logger, ILoginItemService loginItemService, IUserContextHelper userContext) : ControllerBase
+public class LoginItemController(
+    ILogger<LoginItemController> logger,
+    ILoginItemService loginItemService,
+    IUserContextHelper userContext) : ControllerBase
 {
     [HttpPost("create")]
-    public async Task<IActionResult> Create([FromBody]LoginItemRequest request)
+    public async Task<IActionResult> Create([FromBody] LoginItemRequest request)
     {
+        if (!userContext.IsAuthenticated)
+        {
+            return Unauthorized("User is not logged in.");
+        }
+
         try
         {
-            if(!userContext.IsAuthenticated)
-            {
-                return Unauthorized("User is not logged in.");
-            }
-            
             var item = new LoginItem
             {
                 Title = request.Title,
@@ -33,32 +36,32 @@ public class LoginItemController(ILogger<LoginItemController> logger, ILoginItem
                 Notes = request.Notes,
                 UserId = userContext.UserId
             };
-            
+
             var created = await loginItemService.CreateLoginItem(item);
-            
+
             return Created();
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error creating login item");
-            
+
             return BadRequest("Failed to create login item");
         }
     }
 
-    [HttpPost("update")]
-    public async Task<IActionResult> Update([FromBody] LoginItemRequest request)
+    [HttpPost("update/{id:int}")]
+    public async Task<IActionResult> Update([FromBody] LoginItemRequest request, int id)
     {
+        if (!userContext.IsAuthenticated)
+        {
+            return Unauthorized("User is not logged in.");
+        }
+
         try
         {
-            if (!userContext.IsAuthenticated)
-            {
-                return Unauthorized("User is not logged in.");
-            }
-
             var item = new LoginItem
             {
-                LoginItemId = request.LoginItemId,
+                LoginItemId = id,
                 Title = request.Title,
                 Username = request.Username,
                 Password = request.Password,
@@ -69,7 +72,15 @@ public class LoginItemController(ILogger<LoginItemController> logger, ILoginItem
 
             var updatedLoginItem = await loginItemService.UpdateLoginItem(item);
 
-            return Ok(updatedLoginItem);
+            var response = new LoginItemResponse(
+                updatedLoginItem.LoginItemId,
+                updatedLoginItem.Title,
+                updatedLoginItem.WebsiteUrl,
+                updatedLoginItem.Username,
+                updatedLoginItem.Password,
+                updatedLoginItem.Notes);
+
+            return Ok(response);
         }
         catch (LoginItemNotFoundException ex)
         {
@@ -85,23 +96,21 @@ public class LoginItemController(ILogger<LoginItemController> logger, ILoginItem
 
             return BadRequest("Failed to update login item");
         }
-        
     }
 
-    [HttpDelete("delete/{id:int}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
+        if (!userContext.IsAuthenticated)
+        {
+            return Unauthorized("User is not logged in.");
+        }
+
         try
         {
-            if(!userContext.IsAuthenticated)
-            {
-                return Unauthorized("User is not logged in.");
-            }
-
             await loginItemService.DeleteLoginItem(id);
 
             return Ok("Login item deleted");
-
         }
         catch (LoginItemNotFoundException ex)
         {
@@ -114,6 +123,74 @@ public class LoginItemController(ILogger<LoginItemController> logger, ILoginItem
         catch (Exception ex)
         {
             return BadRequest("Failed to delete login item");
+        }
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> Get(int id)
+    {
+        if (!userContext.IsAuthenticated)
+        {
+            return Unauthorized("User is not logged in.");
+        }
+
+        try
+        {
+            var loginItem = await loginItemService.GetLoginItem(id);
+
+            var response = new LoginItemResponse(
+                loginItem.LoginItemId,
+                loginItem.Title,
+                loginItem.WebsiteUrl,
+                loginItem.Username,
+                loginItem.Password,
+                loginItem.Notes);
+
+            return Ok(response);
+        }
+        catch (LoginItemNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized("User not authorized to update login item.");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Failed to retrieve login item");
+        }
+    }
+
+    [HttpGet("list-by-userid")]
+    public async Task<IActionResult> GetListByUserId()
+    {
+        if (!userContext.IsAuthenticated)
+        {
+            return Unauthorized("User is not logged in.");
+        }
+
+        try
+        {
+            var loginItems = await loginItemService.GetLoginItemsByUserId(userContext.UserId);
+
+            var response = loginItems.Select(loginItem => new LoginItemResponse(loginItem.LoginItemId, loginItem.Title,
+                loginItem.WebsiteUrl,
+                loginItem.Username, loginItem.Password, loginItem.Notes)).ToList();
+
+            return Ok(response);
+        }
+        catch (LoginItemNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized("User not authorized to update login item.");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Failed to retrieve login item");
         }
     }
 }
