@@ -104,6 +104,11 @@ public class LoginItemService : ILoginItemService
         return loginItems;
     }
 
+    public string GenerateRandomPassword(int passwordLength, bool useLetters, bool useMixedCase, bool useNumbers, bool useSpecialCharacters)
+    {
+        throw new NotImplementedException();
+    }
+
     private async Task<LoginItem> GetLoginItemIfBelongsToCurrentUser(int loginItemId)
     {
         var userId = _userContext.UserId;

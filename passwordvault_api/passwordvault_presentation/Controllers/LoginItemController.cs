@@ -9,6 +9,7 @@ using passwordvault_presentation.Responses;
 
 namespace passwordvault_presentation.Controllers;
 
+//TODO: Remove if statement for authentication if not required
 [Authorize]
 [ApiController]
 [Route("[controller]")]
@@ -191,6 +192,26 @@ public class LoginItemController(
         catch (Exception ex)
         {
             return BadRequest("Failed to retrieve login item");
+        }
+    }
+
+    [HttpGet("generate-password")]
+    public async Task<IActionResult> GeneratePassword(int passwordLength, bool useLetters, bool useMixedCase, bool useNumbers, bool useSpecialCharacters)
+    {
+        if (!userContext.IsAuthenticated)
+        {
+            return Unauthorized("User is not logged in.");
+        }
+
+        try
+        {
+            var generatedPassword = loginItemService.GenerateRandomPassword(passwordLength, useLetters, useMixedCase, useNumbers, useSpecialCharacters);
+            
+            return Ok(generatedPassword);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Failed to generate password");
         }
     }
 }
