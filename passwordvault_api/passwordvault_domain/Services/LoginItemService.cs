@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using passwordvault_domain.Entities;
@@ -104,9 +105,45 @@ public class LoginItemService : ILoginItemService
         return loginItems;
     }
 
-    public string GenerateRandomPassword(int passwordLength, bool useLetters, bool useMixedCase, bool useNumbers, bool useSpecialCharacters)
+    public string GenerateRandomPassword(int passwordLength, bool useLetters, bool useMixedCase, bool useNumbers,
+        bool useSpecialCharacters)
     {
-        throw new NotImplementedException();
+        const string lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+        const string uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string numberChars = "0123456789";
+        const string specialChars = "!@#$%^&*()_-+=<>?";
+
+        var validChars = new StringBuilder();
+        var password = new StringBuilder();
+
+        if (useLetters)
+        {
+            validChars.Append(lowercaseChars);
+            if (useMixedCase)
+                validChars.Append(uppercaseChars);
+        }
+
+        if (useNumbers)
+            validChars.Append(numberChars);
+        if (useSpecialCharacters)
+            validChars.Append(specialChars);
+
+        if (validChars.Length == 0)
+            throw new ArgumentException("At least one character set must be selected.");
+
+        using (var rng = System.Security.Cryptography.RandomNumberGenerator.Create())
+        {
+            var uintBuffer = new byte[sizeof(uint)];
+
+            while (password.Length < passwordLength)
+            {
+                rng.GetBytes(uintBuffer);
+                var num = BitConverter.ToUInt32(uintBuffer, 0);
+                password.Append(validChars[(int)(num % (uint)validChars.Length)]);
+            }
+        }
+
+        return password.ToString();
     }
 
     private async Task<LoginItem> GetLoginItemIfBelongsToCurrentUser(int loginItemId)

@@ -9,7 +9,6 @@ using passwordvault_presentation.Responses;
 
 namespace passwordvault_presentation.Controllers;
 
-//TODO: Remove if statement for authentication if not required
 [Authorize]
 [ApiController]
 [Route("[controller]")]
@@ -21,11 +20,6 @@ public class LoginItemController(
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] LoginItemRequest request)
     {
-        if (!userContext.IsAuthenticated)
-        {
-            return Unauthorized("User is not logged in.");
-        }
-
         try
         {
             var item = new LoginItem
@@ -102,11 +96,6 @@ public class LoginItemController(
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
-        if (!userContext.IsAuthenticated)
-        {
-            return Unauthorized("User is not logged in.");
-        }
-
         try
         {
             await loginItemService.DeleteLoginItem(id);
@@ -130,11 +119,6 @@ public class LoginItemController(
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Get(int id)
     {
-        if (!userContext.IsAuthenticated)
-        {
-            return Unauthorized("User is not logged in.");
-        }
-
         try
         {
             var loginItem = await loginItemService.GetLoginItem(id);
@@ -166,11 +150,6 @@ public class LoginItemController(
     [HttpGet("list-by-userid")]
     public async Task<IActionResult> GetListByUserId()
     {
-        if (!userContext.IsAuthenticated)
-        {
-            return Unauthorized("User is not logged in.");
-        }
-
         try
         {
             var loginItems = await loginItemService.GetLoginItemsByUserId(userContext.UserId);
@@ -198,11 +177,6 @@ public class LoginItemController(
     [HttpGet("generate-password")]
     public async Task<IActionResult> GeneratePassword(int passwordLength, bool useLetters, bool useMixedCase, bool useNumbers, bool useSpecialCharacters)
     {
-        if (!userContext.IsAuthenticated)
-        {
-            return Unauthorized("User is not logged in.");
-        }
-
         try
         {
             var generatedPassword = loginItemService.GenerateRandomPassword(passwordLength, useLetters, useMixedCase, useNumbers, useSpecialCharacters);
