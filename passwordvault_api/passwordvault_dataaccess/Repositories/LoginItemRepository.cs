@@ -8,8 +8,6 @@ namespace passwordvault_dataaccess.Repositories;
 
 public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemRepository> logger) : ILoginItemRepository
 {
-    //TODO: Test error handling of repository
-
     private DbSet<LoginItem> LoginItems => dbContext.Set<LoginItem>();
 
     public async Task<int> Create(LoginItem loginItem)
