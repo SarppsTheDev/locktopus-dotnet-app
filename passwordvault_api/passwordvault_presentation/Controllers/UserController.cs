@@ -25,12 +25,13 @@ public class UserController(UserManager<User> userManager, ILogger<UserControlle
             var result = await userManager.CreateAsync(user, request.Password);
 
             if (!result.Succeeded)
-                return BadRequest(result.Errors);
+                throw new Exception(result.Errors.First().Description);
 
             return Ok("User registered successfully");
         }
         catch (Exception ex)
         {
+            logger.LogError(ex.Message);
             return BadRequest("Failed to register user");
         }
     }

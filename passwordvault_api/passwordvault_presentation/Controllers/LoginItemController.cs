@@ -175,12 +175,14 @@ public class LoginItemController(
     }
 
     [HttpGet("generate-password")]
-    public async Task<IActionResult> GeneratePassword(int passwordLength, bool useLetters, bool useMixedCase, bool useNumbers, bool useSpecialCharacters)
+    public async Task<IActionResult> GeneratePassword(int passwordLength, bool useLetters, bool useMixedCase, bool useNumbers, bool useSymbols)
     {
         try
         {
-            var generatedPassword = loginItemService.GenerateRandomPassword(passwordLength, useLetters, useMixedCase, useNumbers, useSpecialCharacters);
-            
+            var generatedPassword =
+                loginItemService.GenerateRandomPassword(passwordLength, useLetters, useMixedCase, useNumbers,
+                    useSymbols);
+
             return Ok(generatedPassword);
         }
         catch (Exception ex)

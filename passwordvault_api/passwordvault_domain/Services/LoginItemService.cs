@@ -105,17 +105,20 @@ public class LoginItemService : ILoginItemService
         return loginItems;
     }
 
-    public string GenerateRandomPassword(int passwordLength, bool useLetters, bool useMixedCase, bool useNumbers,
-        bool useSpecialCharacters)
+    public string GenerateRandomPassword(int passwordLength, bool useLetters = true, bool useMixedCase = true, bool useNumbers = true,
+        bool useSymbols = true)
     {
         const string lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
         const string uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const string numberChars = "0123456789";
-        const string specialChars = "!@#$%^&*()_-+=<>?";
+        const string symbols = "!@#$%^&*()_-+=<>?";
 
         var validChars = new StringBuilder();
         var password = new StringBuilder();
 
+        if (!useLetters && !useMixedCase && !useNumbers && !useSymbols)
+            throw new ArgumentException("At least one password condition must be selected");
+        
         if (useLetters)
         {
             validChars.Append(lowercaseChars);
@@ -125,8 +128,8 @@ public class LoginItemService : ILoginItemService
 
         if (useNumbers)
             validChars.Append(numberChars);
-        if (useSpecialCharacters)
-            validChars.Append(specialChars);
+        if (useSymbols)
+            validChars.Append(symbols);
 
         if (validChars.Length == 0)
             throw new ArgumentException("At least one character set must be selected.");
@@ -144,6 +147,7 @@ public class LoginItemService : ILoginItemService
         }
 
         return password.ToString();
+
     }
 
     private async Task<LoginItem> GetLoginItemIfBelongsToCurrentUser(int loginItemId)
@@ -153,7 +157,7 @@ public class LoginItemService : ILoginItemService
 
         if (loginItem.UserId == userId) return loginItem;
 
-        _logger.LogError("User not authorized to update login item");
+        _logger.LogError("User not authorized to access login item");
         throw new UnauthorizedAccessException();
     }
 }

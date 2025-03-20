@@ -10,6 +10,16 @@ using passwordvault_domain.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins("http://localhost:8080") // Replace with your frontend's origin
+            .AllowCredentials()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -57,7 +67,6 @@ builder.Services.AddTransient<ILoginItemQueryRepository, LoginItemQueryRepositor
 builder.Services.AddScoped<IUserContextHelper, UserContextHelper>();
 builder.Services.AddTransient<ILoginItemService, LoginItemService>();
 
-
 // Register the Identity services
 builder.Services.AddIdentityCore<User>()
     .AddEntityFrameworkStores<AppDbContext>()
@@ -68,6 +77,8 @@ var app = builder.Build();
 app.MapIdentityApi<User>();
 
 // Configure the HTTP request pipeline.
+app.UseCors("AllowSpecificOrigins"); 
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
