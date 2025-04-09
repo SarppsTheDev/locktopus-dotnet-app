@@ -148,17 +148,23 @@ public class LoginItemController(
     }
 
     [HttpGet("list-by-userid")]
-    public async Task<IActionResult> GetListByUserId()
+    public async Task<ActionResult<PaginatedList<LoginItemResponse>>> GetListByUserId(string? query, int page = 1, int pageSize = 10)
     {
         try
         {
-            var loginItems = await loginItemService.GetLoginItemsByUserId(userContext.UserId);
+            var offset = (page - 1) * pageSize;
+            
+            var (loginItems, totalCount) = await loginItemService.GetLoginItemsByUserId(userContext.UserId, query, offset, pageSize);
 
             var response = loginItems.Select(loginItem => new LoginItemResponse(loginItem.LoginItemId, loginItem.Title,
                 loginItem.WebsiteUrl,
                 loginItem.Username, loginItem.Password, loginItem.Notes)).ToList();
+            
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            
+            var paginatedResponse = new PaginatedList<LoginItemResponse>(response, page, totalPages, totalCount);
 
-            return Ok(response);
+            return Ok(paginatedResponse);
         }
         catch (LoginItemNotFoundException ex)
         {

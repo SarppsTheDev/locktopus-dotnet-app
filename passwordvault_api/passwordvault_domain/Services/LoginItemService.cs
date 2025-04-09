@@ -93,16 +93,16 @@ public class LoginItemService : ILoginItemService
         return loginItem;
     }
 
-    public async Task<List<LoginItem>> GetLoginItemsByUserId(string userId)
+    public async Task<(List<LoginItem> LoginItems, int TotalCount)> GetLoginItemsByUserId(string userId, string? searchTerm, int offset, int pageSize = 12)
     {
-        var loginItems = await _loginItemQueryRepository.GetLoginItemsByUserId(userId);
+        var paginatedResult = await _loginItemQueryRepository.GetLoginItemsByUserId(userId, searchTerm, offset, pageSize);
 
-        foreach (var loginItem in loginItems)
+        foreach (var loginItem in paginatedResult.LoginItems)
         {
             loginItem.Password = _encryptionHelper.Decrypt(loginItem.EncryptedPassword);
         }
 
-        return loginItems;
+        return paginatedResult;
     }
 
     public string GenerateRandomPassword(int passwordLength, bool useLetters = true, bool useMixedCase = true, bool useNumbers = true,
@@ -118,7 +118,7 @@ public class LoginItemService : ILoginItemService
 
         if (!useLetters && !useMixedCase && !useNumbers && !useSymbols)
             throw new ArgumentException("At least one password condition must be selected");
-        
+         
         if (useLetters)
         {
             validChars.Append(lowercaseChars);

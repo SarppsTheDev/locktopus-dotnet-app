@@ -20,8 +20,24 @@ public class LoginItemQueryRepository(AppDbContext dbContext) : ILoginItemQueryR
         return loginItem;
     }
 
-    public async Task<List<LoginItem>> GetLoginItemsByUserId(string userId)
+    public async Task<(List<LoginItem> LoginItems, int TotalCount)> GetLoginItemsByUserId(string userId, string? searchTerm, int offset,
+        int pageSize = 12)
     {
-        return await LoginItems.Where(li => li.UserId == userId).ToListAsync();
+        var loginItems = await LoginItems
+            .Where(li => li.UserId == userId)
+            .ToListAsync();
+        
+        if(!string.IsNullOrEmpty(searchTerm))
+            loginItems = loginItems.Where(li => li.Title.Contains(searchTerm)).ToList();
+
+        var countOfLoginItems = loginItems.Count;
+
+        var paginatedLoginItems = loginItems
+            .OrderBy(li => li.Title)
+            .Skip(offset)
+            .Take(pageSize)
+            .ToList();
+
+        return (paginatedLoginItems, countOfLoginItems);
     }
 }
