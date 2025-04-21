@@ -35,4 +35,30 @@ public class UserController(UserManager<User> userManager, ILogger<UserControlle
             return BadRequest("Failed to register user");
         }
     }
+    
+    // [HttpPost("update")]
+    // public async Task<IActionResult> Update([FromBody] UserRegistrationRequest request)
+    // {
+    //     try
+    //     {
+    //         var user = new User
+    //         {
+    //             UserName = request.Email,
+    //             Email = request.Email,
+    //             FirstName = request.FirstName,
+    //             LastName = request.LastName,
+    //         };
+    //
+    //         var result = await userManager.Ch(user);
+    //         if (!result.Succeeded)
+    //             throw new Exception(result.Errors.First().Description);
+    //
+    //         return Ok("User registered successfully");
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         logger.LogError(ex.Message);
+    //         return BadRequest("Failed to register user");
+    //     }
+    // }
 }

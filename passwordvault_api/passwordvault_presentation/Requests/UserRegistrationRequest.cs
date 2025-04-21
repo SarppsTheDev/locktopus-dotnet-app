@@ -1,6 +1,6 @@
 namespace passwordvault_presentation.Requests;
 
-public class UserRegistrationRequest
+public record UserRegistrationRequest
 {
     public string Email { get; set; }
     public string Password { get; set; }

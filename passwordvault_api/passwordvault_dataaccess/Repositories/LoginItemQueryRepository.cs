@@ -28,7 +28,7 @@ public class LoginItemQueryRepository(AppDbContext dbContext) : ILoginItemQueryR
             .ToListAsync();
         
         if(!string.IsNullOrEmpty(searchTerm))
-            loginItems = loginItems.Where(li => li.Title.Contains(searchTerm)).ToList();
+            loginItems = loginItems.Where(li => li.Title.ToLower().Contains(searchTerm.ToLower())).ToList();
 
         var countOfLoginItems = loginItems.Count;
 

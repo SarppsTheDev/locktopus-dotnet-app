@@ -47,4 +47,6 @@ public class LoginItem
     /// </summary>
     public string UserId { get; set; }
     public User User { get; set; }
+    
+    //TODO: Add properties for CreatedAt and UpdatedAt
 }
