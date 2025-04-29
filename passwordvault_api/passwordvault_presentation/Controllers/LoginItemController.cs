@@ -108,10 +108,12 @@ public class LoginItemController(
         }
         catch (UnauthorizedAccessException ex)
         {
-            return Unauthorized("User not authorized to update login item.");
+            return Forbid("User not authorized to delete login item.");
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error updating login item");
+            
             return BadRequest("Failed to delete login item");
         }
     }
