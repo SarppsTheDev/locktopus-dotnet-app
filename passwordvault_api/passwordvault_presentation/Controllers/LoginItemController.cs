@@ -141,7 +141,7 @@ public class LoginItemController(
         }
         catch (UnauthorizedAccessException ex)
         {
-            return Unauthorized("User not authorized to update login item.");
+            return Forbid("User not authorized to update login item.");
         }
         catch (Exception ex)
         {

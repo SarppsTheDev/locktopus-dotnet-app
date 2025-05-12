@@ -62,10 +62,13 @@ builder.Services.AddDbContext<AppDbContext>();
 // Data Repositories
 builder.Services.AddTransient<ILoginItemRepository, LoginItemRepository>();
 builder.Services.AddTransient<ILoginItemQueryRepository, LoginItemQueryRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IUserQueryRepository, UserQueryRepository>();
 
 // Domain Services
 builder.Services.AddScoped<IUserContextHelper, UserContextHelper>();
 builder.Services.AddTransient<ILoginItemService, LoginItemService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 // Register the Identity services
 builder.Services.AddIdentityCore<User>()
