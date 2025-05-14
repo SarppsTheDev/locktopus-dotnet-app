@@ -5,6 +5,7 @@ using passwordvault_domain.Entities;
 using passwordvault_domain.Helpers;
 using passwordvault_domain.Services;
 using passwordvault_presentation.Requests;
+using passwordvault_presentation.Responses;
 
 namespace passwordvault_presentation.Controllers;
 
@@ -45,9 +46,7 @@ public class UserController(UserManager<User> userManager, IUserService userServ
     {
         try
         {
-            if (userContext.UserId != request.UserId) return Forbid("User is not authorized to update this user's personal info");
-            
-            var result = await userService.UpdateUserPersonalInfo(request.UserId, request.FirstName, request.LastName);
+            var result = await userService.UpdateUserPersonalInfo(userContext.UserId, request.FirstName, request.LastName);
             
             return Ok("User's personal info successfully");
         }
@@ -93,6 +92,29 @@ public class UserController(UserManager<User> userManager, IUserService userServ
         {
             logger.LogError(ex.Message);
             return BadRequest("Failed to update email");
+        }
+    }
+
+    [HttpGet("profile")]
+    public async Task<IActionResult> GetProfile()
+    {
+        try
+        {
+            var user = await userManager.FindByIdAsync(userContext.UserId);
+
+            var response = new UserProfileResponse
+            (
+                user.Email,
+                user.FirstName,
+                user.LastName,
+                user.UserName
+            );
+            
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Failed to retrieve user's profile");
         }
     }
 }
