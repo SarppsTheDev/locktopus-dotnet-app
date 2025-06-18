@@ -15,6 +15,7 @@ namespace passwordvault_presentation.Controllers;
 public class UserController(UserManager<User> userManager, IUserService userService, IUserContextHelper userContext, ILogger<UserController> logger) : ControllerBase
 {
     [HttpPost("register")]
+    [AllowAnonymous]
     public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
     {
         try
@@ -115,6 +116,23 @@ public class UserController(UserManager<User> userManager, IUserService userServ
         catch (Exception ex)
         {
             return BadRequest("Failed to retrieve user's profile");
+        }
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteUser()
+    {
+        try
+        {
+            var user = await userManager.FindByIdAsync(userContext.UserId);
+            
+            await userService.DeleteUser(user);
+
+            return Ok("User account has been deleted");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Failed to delete user's account");
         }
     }
 }

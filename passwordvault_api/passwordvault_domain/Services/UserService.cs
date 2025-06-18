@@ -1,11 +1,10 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using passwordvault_domain.Entities;
 using passwordvault_domain.Repositories;
 
 namespace passwordvault_domain.Services;
 
-public class UserService(UserManager<User> userManager, IUserRepository userRepository, ILogger<UserService> logger) : IUserService
+public class UserService(IUserRepository userRepository, ILogger<UserService> logger) : IUserService
 {
     public async Task<User> UpdateUserPersonalInfo(string userId, string firstName, string lastName)
     {
@@ -23,5 +22,19 @@ public class UserService(UserManager<User> userManager, IUserRepository userRepo
         }
             
         return user;
+    }
+
+    public async Task DeleteUser(User user)
+    {
+        try
+        {
+            await userRepository.Delete(user.Id);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to delete user: {User}", user.UserName);
+            throw;
+        }
+        
     }
 }

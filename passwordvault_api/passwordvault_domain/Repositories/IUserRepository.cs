@@ -6,4 +6,5 @@ public interface IUserRepository : IRepository<User>
 {
     // Methods are inherited
     Task<User> GetById(string id);
+    Task<int> Delete(string id);
 }

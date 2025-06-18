@@ -6,7 +6,7 @@ namespace passwordvault_dataaccess.Repositories;
 
 public class UserRepository(AppDbContext dbContext) : IUserRepository
 {
-    private IQueryable<User> Users => dbContext.Set<User>();
+    private DbSet<User> Users => dbContext.Set<User>();
     
     public Task<int> Create(User user)
     {
@@ -27,7 +27,14 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
 
     public Task<int> Delete(int id)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException("User IDs are strings. This method is not supported.");
+    }
+
+    public async Task<int> Delete(string id)
+    {
+        var user = await GetById(id);
+        Users.Remove(user);
+        return await dbContext.SaveChangesAsync();
     }
 
     public async Task<User> GetById(string id)
