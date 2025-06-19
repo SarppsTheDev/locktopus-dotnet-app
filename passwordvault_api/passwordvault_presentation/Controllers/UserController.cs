@@ -14,34 +14,6 @@ namespace passwordvault_presentation.Controllers;
 [Route("[controller]")]
 public class UserController(UserManager<User> userManager, IUserService userService, IUserContextHelper userContext, ILogger<UserController> logger) : ControllerBase
 {
-    [HttpPost("register")]
-    [AllowAnonymous]
-    public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
-    {
-        try
-        {
-            var user = new User
-            {
-                UserName = request.Email,
-                Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-            };
-
-            var result = await userManager.CreateAsync(user, request.Password);
-
-            if (!result.Succeeded)
-                throw new Exception(result.Errors.First().Description);
-
-            return Ok("User registered successfully");
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex.Message);
-            return BadRequest("Failed to register user");
-        }
-    }
-    
     [HttpPost("update-personal-details")]
     public async Task<IActionResult> UpdatePersonalDetails([FromBody] UserUpdatePersonalInfoRequest request)
     {
