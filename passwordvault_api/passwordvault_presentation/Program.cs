@@ -71,9 +71,10 @@ builder.Services.AddTransient<ILoginItemService, LoginItemService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 // Register the Identity services
-builder.Services.AddIdentityCore<User>()
+builder.Services.AddIdentityCore<User>(options => options.User.RequireUniqueEmail = true)
     .AddEntityFrameworkStores<AppDbContext>()
-    .AddApiEndpoints();
+    .AddApiEndpoints()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
