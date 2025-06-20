@@ -19,16 +19,15 @@ public class LoginItemService : ILoginItemService
     public LoginItemService(ILoginItemRepository loginItemRepository,
         ILoginItemQueryRepository loginItemQueryRepository,
         IUserContextHelper userContext,
-        IConfiguration configuration,
+        IConfiguration config,
         ILogger<LoginItemService> logger)
     {
         _loginItemRepository = loginItemRepository;
         _logger = logger;
         _loginItemQueryRepository = loginItemQueryRepository;
         _userContext = userContext;
-        var encryptionKey = configuration["EncryptionSecrets:Key"] ??
-                            throw new Exception("Encryption key not configured");
-        var encryptionIv = configuration["EncryptionSecrets:IV"] ?? throw new Exception("Encryption IV not configured");
+        var encryptionKey = config["EncryptionSecrets:Key"] ?? throw new Exception("Encryption key not configured");
+        var encryptionIv = config["EncryptionSecrets:IV"] ?? throw new Exception("Encryption IV not configured");
         _encryptionHelper = new EncryptionHelper(encryptionKey, encryptionIv);
     }
 

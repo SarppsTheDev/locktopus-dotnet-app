@@ -6,7 +6,7 @@ namespace passwordvault_domain.Services;
 
 public class UserService(IUserRepository userRepository, ILogger<UserService> logger) : IUserService
 {
-    public async Task<User> UpdateUserPersonalInfo(string userId, string firstName, string lastName)
+    public async Task<User> UpdateProfile(string userId, string firstName, string lastName)
     {
         var user = await userRepository.GetById(userId);
         
