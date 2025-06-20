@@ -67,6 +67,7 @@ builder.Services.AddTransient<IUserQueryRepository, UserQueryRepository>();
 
 // Domain Services
 builder.Services.AddScoped<IUserContextHelper, UserContextHelper>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddTransient<ILoginItemService, LoginItemService>();
 builder.Services.AddTransient<IUserService, UserService>();
 

@@ -15,11 +15,11 @@ namespace passwordvault_presentation.Controllers;
 public class UserController(UserManager<User> userManager, IUserService userService, IUserContextHelper userContext, ILogger<UserController> logger) : ControllerBase
 {
     [HttpPost("update-personal-details")]
-    public async Task<IActionResult> UpdatePersonalDetails([FromBody] UserUpdatePersonalInfoRequest request)
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
     {
         try
         {
-            var result = await userService.UpdateUserPersonalInfo(userContext.UserId, request.FirstName, request.LastName);
+            var result = await userService.UpdateProfile(userContext.UserId, request.FirstName, request.LastName);
             
             return Ok("User's personal info successfully");
         }

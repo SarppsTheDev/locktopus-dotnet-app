@@ -4,6 +4,6 @@ namespace passwordvault_domain.Services;
 
 public interface IUserService
 {
-    Task<User> UpdateUserPersonalInfo(string userId, string firstName, string lastName);
+    Task<User> UpdateProfile(string userId, string firstName, string lastName);
     Task DeleteUser(User user);
 }
