@@ -22,6 +22,7 @@ public class LoginItemController(
     {
         try
         {
+            //TODO: Encapsulate this logic in service and entity
             var item = new LoginItem
             {
                 Title = request.Title,
@@ -54,6 +55,7 @@ public class LoginItemController(
 
         try
         {
+            //TODO: Encapsulate this logic in service and entity
             var item = new LoginItem
             {
                 LoginItemId = id,
@@ -73,7 +75,9 @@ public class LoginItemController(
                 updatedLoginItem.WebsiteUrl,
                 updatedLoginItem.Username,
                 updatedLoginItem.Password,
-                updatedLoginItem.Notes);
+                updatedLoginItem.Notes,
+                updatedLoginItem.CreatedAt,
+                updatedLoginItem.LastUpdatedAt);
 
             return Ok(response);
         }
@@ -131,7 +135,9 @@ public class LoginItemController(
                 loginItem.WebsiteUrl,
                 loginItem.Username,
                 loginItem.Password,
-                loginItem.Notes);
+                loginItem.Notes,
+                loginItem.CreatedAt,
+                loginItem.LastUpdatedAt);
 
             return Ok(response);
         }
@@ -153,14 +159,14 @@ public class LoginItemController(
     public async Task<ActionResult<PaginatedList<LoginItemResponse>>> GetListByUserId(string? query, int page = 1, int pageSize = 10)
     {
         try
-        {
+        { 
             var offset = (page - 1) * pageSize;
             
             var (loginItems, totalCount) = await loginItemService.GetLoginItemsByUserId(userContext.UserId, query, offset, pageSize);
 
-            var response = loginItems.Select(loginItem => new LoginItemResponse(loginItem.LoginItemId, loginItem.Title,
-                loginItem.WebsiteUrl,
-                loginItem.Username, loginItem.Password, loginItem.Notes)).ToList();
+            var response = loginItems.Select(item => new LoginItemResponse(item.LoginItemId, item.Title,
+                item.WebsiteUrl,
+                item.Username, item.Password, item.Notes, item.CreatedAt, item.LastUpdatedAt)).ToList();
             
             var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
             
