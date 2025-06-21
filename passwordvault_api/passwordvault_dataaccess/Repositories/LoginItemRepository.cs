@@ -29,6 +29,7 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
             existingItem.EncryptedPassword = loginItem.EncryptedPassword;
             existingItem.WebsiteUrl = loginItem.WebsiteUrl;
             existingItem.Notes = loginItem.Notes;
+            existingItem.LastUpdatedAt = DateTime.UtcNow;
 
             await dbContext.SaveChangesAsync();
 

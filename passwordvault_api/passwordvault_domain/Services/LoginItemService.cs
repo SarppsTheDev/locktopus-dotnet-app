@@ -34,6 +34,11 @@ public class LoginItemService : ILoginItemService
     public async Task<int> CreateLoginItem(LoginItem loginItem)
     {
         loginItem.EncryptedPassword = _encryptionHelper.Encrypt(loginItem.Password);
+        
+        var createdAt = DateTime.UtcNow;
+        loginItem.CreatedAt = createdAt;
+        loginItem.LastUpdatedAt = createdAt;
+        
         var createdId = await _loginItemRepository.Create(loginItem);
 
         if (createdId == 0)
@@ -104,6 +109,7 @@ public class LoginItemService : ILoginItemService
         return paginatedResult;
     }
 
+    //TODO: Refactor this to another helper class and break into smaller methods
     public string GenerateRandomPassword(int passwordLength, bool useLetters = true, bool useMixedCase = true, bool useNumbers = true,
         bool useSymbols = true)
     {

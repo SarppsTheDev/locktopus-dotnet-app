@@ -47,6 +47,14 @@ public class LoginItem
     /// </summary>
     public string UserId { get; set; }
     public User User { get; set; }
+
+    /// <summary>
+    /// Date time the login item was created
+    /// </summary>
+    public DateTime CreatedAt { get; set; }
     
-    //TODO: Add properties for CreatedAt and UpdatedAt
+    /// <summary>
+    /// Date time the login item was last updated
+    /// </summary>
+    public DateTime LastUpdatedAt { get; set; }
 }

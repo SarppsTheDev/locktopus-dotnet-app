@@ -6,4 +6,6 @@ public record LoginItemResponse(
     string WebsiteUrl,
     string Username,
     string Password,
-    string Notes);
+    string? Notes,
+    DateTime CreatedAt,
+    DateTime LastUpdatedAt);
