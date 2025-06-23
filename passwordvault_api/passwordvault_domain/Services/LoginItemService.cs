@@ -31,7 +31,7 @@ public class LoginItemService : ILoginItemService
         _encryptionHelper = new EncryptionHelper(encryptionKey, encryptionIv);
     }
 
-    public async Task<int> CreateLoginItem(LoginItem loginItem)
+    public async Task<long> CreateLoginItem(LoginItem loginItem)
     {
         loginItem.EncryptedPassword = _encryptionHelper.Encrypt(loginItem.Password);
         
@@ -73,7 +73,7 @@ public class LoginItemService : ILoginItemService
         return updatedItem;
     }
 
-    public async Task DeleteLoginItem(int loginItemId)
+    public async Task DeleteLoginItem(long loginItemId)
     {
         await GetLoginItemIfBelongsToCurrentUser(loginItemId);
 
@@ -88,7 +88,7 @@ public class LoginItemService : ILoginItemService
         _logger.LogInformation("Successfully deleted login item with ID: {LoginItemId}", loginItemId);
     }
 
-    public async Task<LoginItem> GetLoginItem(int loginItemId)
+    public async Task<LoginItem> GetLoginItem(long loginItemId)
     {
         var loginItem = await GetLoginItemIfBelongsToCurrentUser(loginItemId);
 
@@ -155,7 +155,7 @@ public class LoginItemService : ILoginItemService
 
     }
 
-    private async Task<LoginItem> GetLoginItemIfBelongsToCurrentUser(int loginItemId)
+    private async Task<LoginItem> GetLoginItemIfBelongsToCurrentUser(long loginItemId)
     {
         var userId = _userContext.UserId;
         var loginItem = await _loginItemQueryRepository.GetById(loginItemId);

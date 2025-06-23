@@ -9,7 +9,7 @@ public class LoginItem
     /// ID for Login Item
     /// </summary>
     [Key]
-    public int LoginItemId { get; set; }
+    public long LoginItemId { get; set; }
     
     /// <summary>
     /// Title of the login item i.e. name of website it is for

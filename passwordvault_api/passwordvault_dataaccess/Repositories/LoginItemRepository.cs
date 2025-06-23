@@ -10,7 +10,7 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
 {
     private DbSet<LoginItem> LoginItems => dbContext.Set<LoginItem>();
 
-    public async Task<int> Create(LoginItem loginItem)
+    public async Task<long> Create(LoginItem loginItem)
     {
         LoginItems.Add(loginItem);
         await dbContext.SaveChangesAsync();
@@ -42,7 +42,7 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
         }
     }
 
-    public async Task<int> Delete(int loginItemId)
+    public async Task<long> Delete(long loginItemId)
     {
         try
         {
@@ -58,7 +58,7 @@ public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemReposi
         }
     }
 
-    private async Task<LoginItem> GetExistingLoginItem(int loginItemId)
+    private async Task<LoginItem> GetExistingLoginItem(long loginItemId)
     {
         var existingItem = await LoginItems.FindAsync(loginItemId);
 

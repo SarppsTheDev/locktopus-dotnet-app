@@ -1,7 +1,7 @@
 namespace passwordvault_presentation.Responses;
 
 public record LoginItemResponse(
-    int Id,
+    long Id,
     string Title,
     string WebsiteUrl,
     string Username,
