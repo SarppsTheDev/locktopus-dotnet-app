@@ -8,7 +8,7 @@ public class UserQueryRepository(AppDbContext dbContext) : IUserQueryRepository
 {
     private IQueryable<User> Users => dbContext.Set<User>();
     
-    public Task<User> GetById(int id)
+    public Task<User> GetById(long id)
     {
         throw new NotSupportedException("User IDs are strings. This method is not supported.");
     }

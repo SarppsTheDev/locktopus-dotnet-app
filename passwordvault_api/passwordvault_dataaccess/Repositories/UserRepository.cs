@@ -8,7 +8,7 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
 {
     private DbSet<User> Users => dbContext.Set<User>();
     
-    public Task<int> Create(User user)
+    public Task<long> Create(User user)
     {
         throw new NotImplementedException();
     }
@@ -25,7 +25,7 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
         return existingUser;
     }
 
-    public Task<int> Delete(int id)
+    public Task<long> Delete(long id)
     {
         throw new NotSupportedException("User IDs are strings. This method is not supported.");
     }

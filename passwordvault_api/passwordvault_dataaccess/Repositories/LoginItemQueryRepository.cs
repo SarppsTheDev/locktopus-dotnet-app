@@ -8,7 +8,7 @@ namespace passwordvault_dataaccess.Repositories;
 public class LoginItemQueryRepository(AppDbContext dbContext) : ILoginItemQueryRepository
 {
     private IQueryable<LoginItem> LoginItems => dbContext.Set<LoginItem>();
-    public async Task<LoginItem> GetById(int id)
+    public async Task<LoginItem> GetById(long id)
     {
         var loginItem = await LoginItems.FirstOrDefaultAsync(li => li.LoginItemId == id);
 
