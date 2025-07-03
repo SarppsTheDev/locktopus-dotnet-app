@@ -8,7 +8,7 @@ namespace passwordvault_presentation.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AuthController(UserManager<User> userManager, IEmailService emailService, ILogger<AuthController> logger) : ControllerBase
+public class AuthController(UserManager<User> userManager, IEmailService emailService, IConfiguration config, ILogger<AuthController> logger) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
@@ -43,10 +43,16 @@ public class AuthController(UserManager<User> userManager, IEmailService emailSe
         var user = await userManager.FindByEmailAsync(request.Email);
         if (user == null) return Accepted();
         
+        //TODO: Encapsulate this logic in service
         var token = await userManager.GeneratePasswordResetTokenAsync(user);
         
-        var link = Url.Action("Reset", "Auth", new { email = request.Email, token }, Request.Scheme)!;
-        var html = $"<p>Reset your password: <a href=\"{link}\">Reset Password</a></p>";
+        // URL encode the token for safe transmission
+        var encodedToken = System.Web.HttpUtility.UrlEncode(token);
+        
+        var resetLink = $"{config["AppUrl"]}/reset-password?email={request.Email}&token={encodedToken}";
+        
+        string html = System.IO.File.ReadAllText("Assets/ResetPasswordEmail.html");
+        html = html.Replace("{{ResetLink}}", resetLink);
         
         await emailService.SendEmailAsync(request.Email, "Reset Password", html);
         
@@ -56,6 +62,7 @@ public class AuthController(UserManager<User> userManager, IEmailService emailSe
     [HttpPost("reset-password")]
     public async Task<IActionResult> Reset([FromBody] ResetRequest request)
     {
+        //TODO: Encapsulate this logic in service
         var user = await userManager.FindByEmailAsync(request.Email);
         if (user == null)
             return BadRequest(new { error = "Invalid request." });

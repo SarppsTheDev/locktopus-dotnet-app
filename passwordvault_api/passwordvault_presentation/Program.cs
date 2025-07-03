@@ -77,6 +77,10 @@ builder.Services.AddIdentityCore<User>(options => options.User.RequireUniqueEmai
     .AddApiEndpoints()
     .AddDefaultTokenProviders();
 
+// Set Password Reset Token Lifespan
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+    options.TokenLifespan = TimeSpan.FromMinutes(15));
+
 var app = builder.Build();
 
 app.MapIdentityApi<User>();
