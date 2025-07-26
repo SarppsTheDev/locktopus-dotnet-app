@@ -1,4 +1,4 @@
-namespace passwordvault_presentation.Requests;
+namespace locktopus_presentation.Requests;
 
 public record RegisterUserRequest
 {

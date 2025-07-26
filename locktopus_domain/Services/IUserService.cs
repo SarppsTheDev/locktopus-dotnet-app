@@ -1,6 +1,6 @@
-using passwordvault_domain.Entities;
+using locktopus_domain.Entities;
 
-namespace passwordvault_domain.Services;
+namespace locktopus_domain.Services;
 
 public interface IUserService
 {

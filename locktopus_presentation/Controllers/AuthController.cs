@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using passwordvault_domain.Entities;
-using passwordvault_domain.Services;
-using passwordvault_presentation.Requests;
+using locktopus_domain.Entities;
+using locktopus_domain.Services;
+using locktopus_presentation.Requests;
 
-namespace passwordvault_presentation.Controllers;
+namespace locktopus_presentation.Controllers;
 
 [ApiController]
 [Route("[controller]")]

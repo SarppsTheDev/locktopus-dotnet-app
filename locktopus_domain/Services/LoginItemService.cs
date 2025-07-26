@@ -1,12 +1,12 @@
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using passwordvault_domain.Entities;
-using passwordvault_domain.Exceptions;
-using passwordvault_domain.Helpers;
-using passwordvault_domain.Repositories;
+using locktopus_domain.Entities;
+using locktopus_domain.Exceptions;
+using locktopus_domain.Helpers;
+using locktopus_domain.Repositories;
 
-namespace passwordvault_domain.Services;
+namespace locktopus_domain.Services;
 
 public class LoginItemService : ILoginItemService
 {

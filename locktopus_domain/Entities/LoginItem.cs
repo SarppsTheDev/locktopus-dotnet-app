@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace passwordvault_domain.Entities;
+namespace locktopus_domain.Entities;
 
 public class LoginItem
 {

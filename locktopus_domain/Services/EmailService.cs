@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace passwordvault_domain.Services;
+namespace locktopus_domain.Services;
 
 public class EmailService : IEmailService
 {

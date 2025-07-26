@@ -1,12 +1,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
-using passwordvault_domain.Entities;
-using passwordvault_domain.Repositories;
-using passwordvault_domain.Services;
-using passwordvault_tests.Mocks.Repositories;
+using locktopus_domain.Entities;
+using locktopus_domain.Repositories;
+using locktopus_domain.Services;
+using locktopus_tests.Mocks.Repositories;
 
-namespace passwordvault_tests;
+namespace locktopus_tests;
 
 public class LoginItemServiceTestBase
 {

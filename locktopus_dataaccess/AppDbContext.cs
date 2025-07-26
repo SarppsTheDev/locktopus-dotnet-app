@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using passwordvault_domain.Entities;
+using locktopus_domain.Entities;
 
-namespace passwordvault_dataaccess;
+namespace locktopus_dataaccess;
 
 public class AppDbContext : IdentityDbContext<User>
 {
@@ -12,6 +12,6 @@ public class AppDbContext : IdentityDbContext<User>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(
-            @"Server=localhost,1433;Database=PasswordVaultDB;User Id=sa;Password=Ars3nal1996?!;TrustServerCertificate=true;");
+            @"Server=localhost,1433;Database=LocktopusDB;User Id=sa;Password=Ars3nal1996?!;TrustServerCertificate=true;");
     }
 }

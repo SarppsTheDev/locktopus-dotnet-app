@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace passwordvault_domain.Helpers;
+namespace locktopus_domain.Helpers;
 
 public class EncryptionHelper
 {

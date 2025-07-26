@@ -1,8 +1,8 @@
 using Moq;
-using passwordvault_domain.Entities;
-using passwordvault_domain.Repositories;
+using locktopus_domain.Entities;
+using locktopus_domain.Repositories;
 
-namespace passwordvault_tests.Mocks.Repositories;
+namespace locktopus_tests.Mocks.Repositories;
 
 internal class MockLoginItemRepository
 {
