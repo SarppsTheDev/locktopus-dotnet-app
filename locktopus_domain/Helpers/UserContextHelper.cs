@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
-namespace passwordvault_domain.Helpers;
+namespace locktopus_domain.Helpers;
 
 public class UserContextHelper(IHttpContextAccessor httpContextAccessor) : IUserContextHelper
 {

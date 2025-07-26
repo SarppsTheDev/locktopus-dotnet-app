@@ -1,7 +1,7 @@
 ﻿using Moq;
-using passwordvault_domain.Entities;
+using locktopus_domain.Entities;
 
-namespace passwordvault_tests;
+namespace locktopus_tests;
 
 [TestFixture]
 public class CreateLoginItemTests : LoginItemServiceTestBase

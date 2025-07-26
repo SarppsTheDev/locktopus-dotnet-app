@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using passwordvault_domain.Entities;
-using passwordvault_domain.Helpers;
-using passwordvault_domain.Services;
-using passwordvault_presentation.Requests;
-using passwordvault_presentation.Responses;
+using locktopus_domain.Entities;
+using locktopus_domain.Helpers;
+using locktopus_domain.Services;
+using locktopus_presentation.Requests;
+using locktopus_presentation.Responses;
 
-namespace passwordvault_presentation.Controllers;
+namespace locktopus_presentation.Controllers;
 
 [Authorize]
 [ApiController]

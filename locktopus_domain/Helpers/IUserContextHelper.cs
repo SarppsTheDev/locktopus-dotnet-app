@@ -1,4 +1,4 @@
-namespace passwordvault_domain.Helpers;
+namespace locktopus_domain.Helpers;
 
 public interface IUserContextHelper
 {

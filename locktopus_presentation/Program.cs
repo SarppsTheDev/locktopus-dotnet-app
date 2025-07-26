@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
-using passwordvault_dataaccess;
-using passwordvault_dataaccess.Repositories;
-using passwordvault_domain.Entities;
-using passwordvault_domain.Helpers;
-using passwordvault_domain.Repositories;
-using passwordvault_domain.Services;
+using locktopus_dataaccess;
+using locktopus_dataaccess.Repositories;
+using locktopus_domain.Entities;
+using locktopus_domain.Helpers;
+using locktopus_domain.Repositories;
+using locktopus_domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

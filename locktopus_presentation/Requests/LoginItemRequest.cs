@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace passwordvault_presentation.Requests;
+namespace locktopus_presentation.Requests;
 
 //TODO: Refactor URL validation into domain service
 public class LoginItemRequest

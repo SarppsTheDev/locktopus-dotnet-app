@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace passwordvault_domain.Entities;
+namespace locktopus_domain.Entities;
 
 public class User : IdentityUser
 {

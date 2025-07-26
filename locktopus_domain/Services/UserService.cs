@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
-using passwordvault_domain.Entities;
-using passwordvault_domain.Repositories;
+using locktopus_domain.Entities;
+using locktopus_domain.Repositories;
 
-namespace passwordvault_domain.Services;
+namespace locktopus_domain.Services;
 
 public class UserService(IUserRepository userRepository, ILogger<UserService> logger) : IUserService
 {

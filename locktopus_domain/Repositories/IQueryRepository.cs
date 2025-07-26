@@ -1,4 +1,4 @@
-namespace passwordvault_domain.Repositories;
+namespace locktopus_domain.Repositories;
 
 public interface IQueryRepository<T>
 {

@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using passwordvault_domain.Entities;
-using passwordvault_domain.Exceptions;
-using passwordvault_domain.Repositories;
+using locktopus_domain.Entities;
+using locktopus_domain.Exceptions;
+using locktopus_domain.Repositories;
 
-namespace passwordvault_dataaccess.Repositories;
+namespace locktopus_dataaccess.Repositories;
 
 public class LoginItemRepository(AppDbContext dbContext, ILogger<LoginItemRepository> logger) : ILoginItemRepository
 {

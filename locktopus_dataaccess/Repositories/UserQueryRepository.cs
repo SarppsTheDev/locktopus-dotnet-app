@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using passwordvault_domain.Entities;
-using passwordvault_domain.Repositories;
+using locktopus_domain.Entities;
+using locktopus_domain.Repositories;
 
-namespace passwordvault_dataaccess.Repositories;
+namespace locktopus_dataaccess.Repositories;
 
 public class UserQueryRepository(AppDbContext dbContext) : IUserQueryRepository
 {

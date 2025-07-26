@@ -1,4 +1,4 @@
-namespace passwordvault_domain.Exceptions;
+namespace locktopus_domain.Exceptions;
 
 public class LoginItemNotFoundException : Exception
 {

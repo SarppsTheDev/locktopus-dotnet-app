@@ -1,4 +1,4 @@
-namespace passwordvault_domain.Services;
+namespace locktopus_domain.Services;
 
 public interface IEmailService
 {

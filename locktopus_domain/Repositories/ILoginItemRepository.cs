@@ -1,6 +1,6 @@
-using passwordvault_domain.Entities;
+using locktopus_domain.Entities;
 
-namespace passwordvault_domain.Repositories;
+namespace locktopus_domain.Repositories;
 
 public interface ILoginItemRepository : IRepository<LoginItem>
 {

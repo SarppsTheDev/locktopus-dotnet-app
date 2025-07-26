@@ -1,4 +1,4 @@
-namespace passwordvault_presentation.Responses;
+namespace locktopus_presentation.Responses;
 
 public record LoginItemResponse(
     long Id,
