@@ -13,8 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\passwordvault_dataaccess\passwordvault_dataaccess.csproj" />
-      <ProjectReference Include="..\passwordvault_domain\passwordvault_domain.csproj" />
+      <ProjectReference Include="..\locktopus_dataaccess\locktopus_dataaccess.csproj" />
+      <ProjectReference Include="..\locktopus_domain\locktopus_domain.csproj" />
     </ItemGroup>
 
 </Project>

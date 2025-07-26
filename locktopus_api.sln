@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "passwordvault_presentation", "passwordvault_presentation\passwordvault_presentation.csproj", "{FF18B863-79E6-401C-882E-ECD88C108A83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "locktopus_presentation", "locktopus_presentation\locktopus_presentation.csproj", "{FF18B863-79E6-401C-882E-ECD88C108A83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "passwordvault_dataaccess", "passwordvault_dataaccess\passwordvault_dataaccess.csproj", "{81E67AB3-3391-4065-8E54-E1871FE0BBBB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "locktopus_dataaccess", "locktopus_dataaccess\locktopus_dataaccess.csproj", "{81E67AB3-3391-4065-8E54-E1871FE0BBBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "passwordvault_domain", "passwordvault_domain\passwordvault_domain.csproj", "{65F420F0-650E-4558-906E-777CB8621774}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "locktopus_domain", "locktopus_domain\locktopus_domain.csproj", "{65F420F0-650E-4558-906E-777CB8621774}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "passwordvault_tests", "passwordvault_tests\passwordvault_tests.csproj", "{9B912954-3104-40E2-9E5E-FFFE7C466166}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "locktopus_tests", "locktopus_tests\locktopus_tests.csproj", "{9B912954-3104-40E2-9E5E-FFFE7C466166}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
