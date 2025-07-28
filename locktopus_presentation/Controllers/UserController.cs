@@ -14,7 +14,7 @@ namespace locktopus_presentation.Controllers;
 [Route("[controller]")]
 public class UserController(UserManager<User> userManager, IUserService userService, IUserContextHelper userContext, ILogger<UserController> logger) : ControllerBase
 {
-    [HttpPost("update-personal-details")]
+    [HttpPost("update-profile")]
     public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
     {
         try
