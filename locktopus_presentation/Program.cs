@@ -88,11 +88,8 @@ app.MapIdentityApi<User>();
 // Configure the HTTP request pipeline.
 app.UseCors("AllowSpecificOrigins"); 
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
