@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using locktopus_domain.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace locktopus_dataaccess;
 
-public class AppDbContext : IdentityDbContext<User>
+public class AppDbContext(IConfiguration config) : IdentityDbContext<User>
 {
     DbSet<User> Users { get; set; }
     DbSet<LoginItem> LoginItems { get; set; }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(
-            @"Server=localhost,1433;Database=LocktopusDB;User Id=sa;Password=Ars3nal1996?!;TrustServerCertificate=true;");
+        optionsBuilder.UseSqlServer(config["SQLServerDB:ConnectionString"]);
     }
 }

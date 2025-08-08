@@ -17,6 +17,7 @@ env:
   DOTNET_VERSION: '9.x'
   SOLUTION_PATH: 'locktopus_api.sln'
   API_PROJECT_PATH: 'locktopus_presentation'
+  DB_PROJECT_PATH: 'locktopus_dataaccess'
   PUBLISH_DIR: './publish'
 
 # Define the separate jobs that make up this workflow
@@ -64,11 +65,37 @@ jobs:
           name: webapp  # Name of the artifact
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
+  apply-migrations:
+    name: Apply EF Core Migrations
+    runs-on: ubuntu-latest
+    needs: [build-and-test]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install EF Core CLI tools
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Create Migration Bundle
+        run: dotnet ef migrations bundle
+          --startup-project ${{ env.API_PROJECT_PATH }}
+          --project ${{ env.DB_PROJECT_PATH }}
+          --context AppDbContext
+          --output app-bundle.exe
+
+      - name: Apply App Migrations
+        run: ./app-bundle.exe --connection "${{ secrets.AZURE_SQL_CONNECTION_STRING }}"
+
   # Second job: deploy the application to Azure
   deploy:
     name: Deploy to Azure
     runs-on: ubuntu-latest
-    needs: [build-and-test] # This job depends on the build job
+    needs: [apply-migrations] # This job depends on the build job
     permissions:
       id-token: write #This is required for requesting the JWT
       contents: read #This is required for actions/checkout
@@ -81,7 +108,7 @@ jobs:
           name: webapp
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
-      # # Login to Azure using service principal credentials
+      # Login to Azure using service principal credentials
       # - name: Login to Azure
       #   uses: azure/login@v2
       #   with:
